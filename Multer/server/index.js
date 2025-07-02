@@ -1,24 +1,23 @@
-const express = require("express")
-const cors = require("cors")
-const app = express()
+const express = require("express");
+const cors = require("cors");
+const upload = require("./Config/multer");
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+// No need for express.json() when handling file uploads
 
 app.get("/api/test", (req, res) => {
-    res.send("Test Routes is working")
-})
+    res.send("Test Route is working");
+});
 
-app.post("/api/file/upload", (req, res) => {
-    res.send("File uploaded Successfully")
-    // console.log("File uploaded Successfully")
-})
+app.post("/api/file/upload", upload.single("file"), (req, res) => {
+    console.log("File uploaded Successfully:", req.file);
+    res.json({
+        message: "File uploaded Successfully",
+        file: req.file
+    });
+});
 
-
-
-
-
-
-app.listen(5000, () => {
-    console.log("server is running")
-})
+app.listen(8080, () => {
+    console.log("Server is running on port 8080");
+});
