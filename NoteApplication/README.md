@@ -6,6 +6,13 @@ This is a full-stack Note App built using **React** (frontend), **Node.js + Expr
 
 ---
 
+## 🎥 Demo Video
+
+> 📽️ _Watch a quick demo of the Note App in action_  
+> [Click to Watch Video](#) *(Replace `#` with your YouTube/Drive/loom link)*
+
+--
+
 ## 🚀 Features
 
 - ✅ User Registration and Login
