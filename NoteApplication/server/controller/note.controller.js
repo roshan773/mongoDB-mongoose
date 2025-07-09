@@ -2,12 +2,12 @@ const noteModel = require("../model/note.model")
 
 const noteController = {
   test: (req, res) => {
-    res.status(201).json({ message: "Test routes Working" })
+    res.status(201).json({ message: "Test routes Working" });
   },
 
   create: async (req, res) => {
     if (!req.body.title || !req.body.content) {
-      return res.status(400).json({ message: "Title and content are required" })
+      return res.status(400).json({ message: "Title and content are required" });
     }
 
     try {
@@ -16,10 +16,10 @@ const noteController = {
         userId: req?.user?._id,
       });
 
-      res.status(201).json({ message: "Note Created Successfully", note })
+      res.status(201).json({ message: "Note Created Successfully", note });
     } catch (error) {
       console.error("Error Creating Notes:", error);
-      res.status(500).json({ message: error.message || "Internal Server Error" })
+      res.status(500).json({ message: error.message || "Internal Server Error" });
     }
   },
 
@@ -34,34 +34,38 @@ const noteController = {
         return res.status(404).json({ message: "Note not found" });
       }
 
-      if (isExistNote.userId !== req?.user?._id) {
+      if (isExistNote.userId.toString() !== req?.user?._id.toString()) {
         return res.status(403).json({ message: "You do not have permission to access this note" });
       }
 
       res.status(200).json(isExistNote);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error Fetching Note", error);
-      res.status(500).json({ message: error.message || "Internal server Error" })
+      res.status(500).json({ message: error.message || "Internal server Error" });
     }
   },
 
   update: async (req, res) => {
     const { noteId } = req.params;
     if (!noteId) {
-      return res.status(400).json({ message: "Note Id is requires" })
+      return res.status(400).json({ message: "Note Id is required" });
     }
 
     try {
       const isExistNote = await noteModel.findById(noteId);
       if (!isExistNote) {
-        return res.status(400).json({ message: "Note not Found" })
+        return res.status(404).json({ message: "Note not Found" });
       }
-      await noteModel.findByIdAndDelete(noteId, { $set: { ...req.body } });
-      res.status(200).json("Note Updated successfully")
+
+      if (isExistNote.userId.toString() !== req?.user?._id.toString()) {
+        return res.status(403).json({ message: "You do not have permission to update this note" });
+      }
+
+      await noteModel.findByIdAndUpdate(noteId, { $set: { ...req.body } });
+      res.status(200).json({ message: "Note Updated successfully" });
     } catch (error) {
-      console.error("Error Fetching note", error);
-      res.status(500).json({ message: error.message || "Internal Server Error" })
+      console.error("Error Updating note", error);
+      res.status(500).json({ message: error.message || "Internal Server Error" });
     }
   },
 
@@ -76,17 +80,22 @@ const noteController = {
       if (!isExistNote) {
         return res.status(404).json({ message: "Note not found" });
       }
+
+      if (isExistNote.userId.toString() !== req?.user?._id.toString()) {
+        return res.status(403).json({ message: "You do not have permission to delete this note" });
+      }
+
       await noteModel.findByIdAndDelete(noteId);
       res.status(200).json({ message: "Note Deleted Successfully" });
     } catch (error) {
-      console.error("Error Deleting note", error)
-      res.status(500).json({ message: error.message || "Internal Server Error" })
+      console.error("Error Deleting note", error);
+      res.status(500).json({ message: error.message || "Internal Server Error" });
     }
   },
 
   getAllNotes: async (req, res) => {
-    const { userId } = req.params;
-    console.log("req.user", req.user)
+    const userId = req?.user?._id;
+    console.log("req.user", req.user);
 
     if (!userId) {
       return res.status(400).json({ message: "User Id is required" });
@@ -94,14 +103,12 @@ const noteController = {
 
     try {
       const notes = await noteModel.find({ userId });
-
-      res.status(200).json(notes)
+      res.status(200).json(notes);
     } catch (error) {
       console.error("Error fetching notes", error);
-      res.status(500).json({ message: error.message || "Internal Server error" })
+      res.status(500).json({ message: error.message || "Internal Server error" });
     }
-  }
-}
-
+  },
+};
 
 module.exports = noteController;
