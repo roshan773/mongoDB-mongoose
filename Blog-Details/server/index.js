@@ -1,11 +1,12 @@
 const express = require("express")
 const connectTODb = require("./utils/db")
+const blogRouter = require("./routes/blog.router")
 require("dotenv").config()
 const app = express()
+app.use(express.json())
 
 
-
-
+app.use("/api/blog/", blogRouter)
 
 
 
