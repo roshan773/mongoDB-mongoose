@@ -1,0 +1,34 @@
+/* Custom brand glow effect */
+.brand-glow {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #f3cc30;
+  text-shadow: 0 0 5px #f3cc30, 0 0 10px #f3cc30;
+}
+
+/* Professional hover underline animation */
+.custom-nav-link {
+  position: relative;
+  color: #ffffff !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.custom-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background-color: #f3cc30;
+  transition: width 0.3s ease;
+}
+
+.custom-nav-link:hover::after {
+  width: 100%;
+}
+
+.custom-nav-link:hover {
+  color: #f3cc30 !important;
+}
