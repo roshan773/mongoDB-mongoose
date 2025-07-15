@@ -1,11 +1,12 @@
 const express = require("express")
 const connectTOdb = require("./db/db")
+const bookRouter = require("./routes/book.router")
 
 require("dotenv").config()
 const app = express()
+app.use(express.json())
 
-
-
+app.use("/api/book/", bookRouter)
 
 
 
