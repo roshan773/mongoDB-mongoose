@@ -4,7 +4,7 @@ const bookRouter = express.Router()
 
 
 bookRouter.get("/test", bookController.test)
-bookRouter.get("/allbooks", bookController.books)
+bookRouter.get("/books", bookController.books)
 bookRouter.post("/addbook", bookController.Addbook)
 bookRouter.put("/updatebook/:id", bookController.updatebook)
 bookRouter.delete("/delete/:id", bookController.deletebook)

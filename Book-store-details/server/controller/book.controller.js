@@ -44,8 +44,8 @@ const bookController = {
         const { title, author, price, description, ISBM } = req.body
 
         try {
-            const updatebook = await findByIdAndUpdate(id, { title, author, price, description, ISBM }, { new: true })
-            res.status(200).json({ message: "Book Updated successfully", updatebook })
+            const book = await Book.findByIdAndUpdate(id, { title, author, price, description, ISBM }, { new: true })
+            res.status(200).json({ message: "Book Updated successfully", book })
         } catch (error) {
 
         }
@@ -55,8 +55,8 @@ const bookController = {
         const { id } = req.params
 
         try {
-            const deletebook = await findByIdAndDelete(id)
-            res.status(200).json({ message: "Book Deleted Successfully", deletebook })
+            const book = await Book.findByIdAndDelete(id)
+            res.status(200).json({ message: "Book Deleted Successfully", book })
         } catch (error) {
             res.status(500).json({ message: "Unable to delete book", error: error.message })
         }
@@ -66,8 +66,8 @@ const bookController = {
         const { id } = req.params
 
         try {
-            const getbooks = await findById(id)
-            res.status(200).json({message: "Book found successfully", getbooks})
+            const book = await Book.findById(id)
+            res.status(200).json({message: "Book found successfully", book})
         } catch (error) {
             res.status(500).json({message: "Book not found", error: error.message})
         }
