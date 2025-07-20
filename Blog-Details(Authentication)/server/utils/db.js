@@ -3,9 +3,8 @@ require("dotenv").config()
 
 async function connectTODb(){
     try {
-        await mongoose.connect(process.env.MONGO_URL + "blog-detail(auth)")
+        await mongoose.connect(process.env.MONGO_URL + "blog-Auth")
         console.log(">>>>>>>>>>>>>>>>>>>> Connected To Database <<<<<<<<<<<<<<<<<<<<")
-        // console.log(`Server is connected to ${process.env.MONGO_URL + "blog-detail"}`)
     } catch (error) {
         
     }

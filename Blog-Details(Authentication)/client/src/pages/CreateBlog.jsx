@@ -11,24 +11,34 @@ const CreateBlog = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/blog/createpost', {
-        ...form,
-        tags: form.tags.split(',').map(tag => tag.trim())
-      });
+      await axios.post(
+        'http://localhost:3030/api/blog/createpost',
+        {
+          ...form,
+          tags: form.tags.split(',').map(tag => tag.trim()),
+        },
+        {
+          withCredentials: true,
+        }
+      );
       navigate('/');
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
+      alert('Something went wrong. Please try again  .');
     }
   };
 
-  return (
-    <div className="container mt-5">
-      <div className="card shadow-sm rounded-4 p-4 mx-auto" style={{ maxWidth: '700px' }}>
-        <h2 className="mb-4 text-center">📝 Create New Blog</h2>
 
-        <form onSubmit={handleSubmit}>
+  return (
+    <div className="container py-5">
+      <div className="card shadow-lg border-0 rounded-4 p-5 mx-auto" style={{ maxWidth: '720px' }}>
+        <h2 className="mb-4 text-center fw-bold text-primary">
+          📝 Create a New Blog
+        </h2>
+
+        <form onSubmit={handleSubmit} className="needs-validation" noValidate>
           <div className="mb-3">
-            <label className="form-label">Title</label>
+            <label className="form-label fw-semibold">Title</label>
             <input
               name="title"
               className="form-control"
@@ -39,7 +49,7 @@ const CreateBlog = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Author</label>
+            <label className="form-label fw-semibold">Author</label>
             <input
               name="author"
               className="form-control"
@@ -50,7 +60,7 @@ const CreateBlog = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label">Content</label>
+            <label className="form-label fw-semibold">Content</label>
             <textarea
               name="content"
               className="form-control"
@@ -58,11 +68,11 @@ const CreateBlog = () => {
               placeholder="Write your blog content..."
               onChange={handleChange}
               required
-            ></textarea>
+            />
           </div>
 
           <div className="mb-4">
-            <label className="form-label">Tags</label>
+            <label className="form-label fw-semibold">Tags</label>
             <input
               name="tags"
               className="form-control"
@@ -73,8 +83,11 @@ const CreateBlog = () => {
           </div>
 
           <div className="text-center">
-            <button type="submit" className="btn btn-primary px-4 rounded-pill shadow-sm">
-              Create Blog
+            <button
+              type="submit"
+              className="btn btn-outline-primary px-5 py-2 rounded-pill fw-semibold shadow-sm"
+            >
+              🚀 Publish Blog
             </button>
           </div>
         </form>

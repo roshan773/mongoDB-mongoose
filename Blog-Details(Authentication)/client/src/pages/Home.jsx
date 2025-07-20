@@ -6,7 +6,7 @@ const Home = () => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/blog/getpost')
+    axios.get('http://localhost:3030/api/blog/getpost')
       .then(res => setBlogs(res.data.blog))
       .catch(err => console.log(err));
   }, []);

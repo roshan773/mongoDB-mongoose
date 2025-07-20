@@ -1,78 +1,99 @@
-const User = require("../model/user.model")
-const bcrypt = require("bcrypt")
+const express = require("express");
+const bcrypt = require("bcrypt");
+const User = require("../model/user.model");
 const jwt = require("jsonwebtoken")
-require("dotenv").config()
 
 const userController = {
     test: (req, res) => {
-        res.status(200).json({ message: "user test routes are working" })
+        res.send("test routes are working");
     },
 
     register: async (req, res) => {
-        // res.status(200).json({message: "user register routes are working"})
+        const { email, name, password } = req.body;
 
-        const { username, email, password } = req.body
-
-        if (!username || !email || !password) {
-            res.status(400).json({ message: "All fields are required" })
-        }
-
-        try {
-            const exituser = await User.findOne({ email })
-            if (exituser) {
-                res.status(200).json({ message: "User is already registered" })
-            }
-
-            const hashpassword = await bcrypt.hash(password, 10)
-            const adduser = await User({ username, email, password: hashpassword })
-            await adduser.save()
-            res.status(200).json({ message: "User Registered successfully", adduser })
-        } catch (error) {
-            res.status(500).json({ message: "Unable to register user", error: error.message })
-        }
-
-    },
-
-    login: async (req, res) => {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
+        if (!email || !name || !password) {
+            console.log("Missing fields");
             return res.status(400).json({ message: "All fields are required" });
         }
 
         try {
-            const user = await User.findOne({ email });
+            const userExist = await User.findOne({ email });
 
-            if (!user) {
-                return res.status(400).json({ message: "User not found. Please register first." });
+            if (userExist) {
+                console.log("User already exists");
+                return res.status(409).json({ message: "User already exists, login directly" });
             }
 
-            const isMatch = await bcrypt.compare(password, user.password);
+            const hashpassword = await bcrypt.hash(password, 5);
+            console.log("Hashed password: ", hashpassword);
 
-            if (!isMatch) {
-                return res.status(401).json({ message: "Invalid credentials" });
-            }
+            const newuser = new User({ email, name, password: hashpassword });
+            await newuser.save();
 
-            const token = jwt.sign(
-                { id: user._id, email: user.email },
-                process.env.JWT_Secreatkey,
-                { expiresIn: "1d" }
-            );
-
-            // Save token in cookies
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production", // set to true in production
-                sameSite: "strict",
-                maxAge: 24 * 60 * 60 * 1000, // 1 day
-            });
-
-            res.status(200).json({ message: "Login Successful", token });
+            console.log("User Registered", newuser);
+            res.status(200).json({ message: "User Registered Successfully", newuser });
         } catch (error) {
-            res.status(500).json({ message: "Unable to login. Try again later.", error: error.message });
+            console.error("Error in register:", error);
+            res.status(500).json({ message: "Internal Server Error" });
         }
-    }
+    },
 
-}
+    login: async (req, res) => {
+        // console.log("Login routes is working")
+        // res.status(200).json({message: "Login router is  working"})
 
-module.exports = userController
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password is required" })
+        }
+
+        try {
+            const ExistUser = await User.findOne({ email });
+
+            if (!ExistUser) {
+                return res.status(404).json({ message: "User Not found" })
+            }
+
+            const passwordMatch = await bcrypt.compare(password, ExistUser.password)
+
+            if (!passwordMatch) {
+                return res.status(401).json({ message: "Invalid password" })
+            }
+
+            const { password: _, ...userWithoutPassword } = ExistUser._doc;
+
+            const token = jwt.sign(userWithoutPassword, process.env.JWT_SecretKey, {
+                expiresIn: "7d",
+            });
+            res
+                .cookie("access_token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production", // optional
+                    sameSite: "strict",
+                })
+                .status(200)
+                .json({
+                    message: "User signed in successfully",
+                    user: userWithoutPassword,
+                    token,
+                });
+        } catch (err) {
+            console.error("Error during signin:", err.message);
+            res.status(500).json({ message: "Server error", error: err.message });
+        }
+    },
+
+      logout: (req, res) => {
+        res
+            .clearCookie("access_token", {
+                httpOnly: true,
+                sameSite: "strict",
+                secure: process.env.NODE_ENV === "production",
+            })
+            .status(200)
+            .json({ message: "User logged out successfully" });
+    },
+};
+
+module.exports = userController;
