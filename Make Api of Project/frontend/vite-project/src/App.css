@@ -1,0 +1,82 @@
+.home-hero {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d, #3a6073);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.glow-text {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 8px #ff0, 0 0 20px #f90;
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: 3px solid #fff;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 2px;
+  animation: typing 4s steps(40, end), blink-caret 0.8s step-end infinite;
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+
+  to {
+    width: 100%
+  }
+}
+
+@keyframes blink-caret {
+
+  0%,
+  100% {
+    border-color: transparent;
+  }
+
+  50% {
+    border-color: white;
+  }
+}
+
+.image-card {
+  max-width: 450px;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s;
+}
+
+.image-card:hover {
+  transform: scale(1.05) rotate(-1deg);
+}
+
+.glow-button {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.glow-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
