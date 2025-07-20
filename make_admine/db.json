@@ -103,6 +103,22 @@
         }
       ],
       "id": 7
+    },
+    {
+      "name": "Iron Man",
+      "powers": [
+        "technology",
+        "intelligence",
+        "flight"
+      ],
+      "health": 90,
+      "villains": [
+        {
+          "name": "Mandarin",
+          "health": 70
+        }
+      ],
+      "id": 8
     }
   ]
 }
