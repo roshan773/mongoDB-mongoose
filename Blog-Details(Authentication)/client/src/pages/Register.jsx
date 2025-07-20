@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -22,14 +23,54 @@ const RegisterForm = () => {
     };
 
     return (
-        <div className="container">
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <input name="name" type="text" placeholder="Name" onChange={handleChange} required />
-                <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-                <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-                <button type="submit">Register</button>
-            </form>
+        <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+            <div className="card shadow p-4" style={{ maxWidth: '400px', width: '100%' }}>
+                <h3 className="text-center mb-4">Create Account</h3>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label">Name</label>
+                        <input
+                            name="name"
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter your name"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input
+                            name="email"
+                            type="email"
+                            className="form-control"
+                            placeholder="Enter your email"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="form-label">Password</label>
+                        <input
+                            name="password"
+                            type="password"
+                            className="form-control"
+                            placeholder="Enter password"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" className="btn btn-primary w-100">
+                        Register
+                    </button>
+                </form>
+                <p className="text-center mt-3">
+                    Already have an account? <Link to="/login">Login</Link>
+                </p>
+            </div>
         </div>
     );
 };
