@@ -1,18 +1,17 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../App.css"; // Make sure App.css is imported
+import "../App.css";
 
 const Navbar = () => {
-  useEffect(() => {
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  }, []);
+  const location = useLocation();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 shadow-sm sticky-top">
       <div className="container">
-        <Link to="/" className="navbar-brand brand-highlight">
-          📝 BlogSpace
+        <Link to="/" className="navbar-brand d-flex align-items-center gap-2 fs-4">
+          <span role="img" aria-label="blog">📝</span>
+          <strong className="brand-highlight">BlogSpace</strong>
         </Link>
 
         <button
@@ -20,6 +19,9 @@ const Navbar = () => {
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -27,12 +29,18 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto align-items-center gap-3">
             <li className="nav-item">
-              <Link to="/" className="nav-link nav-link-style">
+              <Link
+                to="/"
+                className={`nav-link ${location.pathname === "/" ? "active-link" : "nav-link-style"}`}
+              >
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/create" className="nav-link nav-link-style">
+              <Link
+                to="/createpost"
+                className={`nav-link ${location.pathname === "/createpost" ? "active-link" : "nav-link-style"}`}
+              >
                 Create Blog
               </Link>
             </li>
