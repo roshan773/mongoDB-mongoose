@@ -39,19 +39,27 @@ app.get("/heroes", (req, res) => {
 });
 
 // ✅ PATCH /update/villain/:hero_id
-app.patch("/update/villain/:hero_id", auth, (req, res) => {
+app.patch("/update/villain/:hero_id", (req, res) => {
     try {
         const { hero_id } = req.params;
         const newVillain = req.body;
         const db = readDB();
+
         const hero = db.heroes.find((h) => h.id == hero_id);
 
         if (!hero) {
             return res.status(404).json({ message: "Hero not found" });
         }
 
+        // ✅ Ensure villains array exists
+        if (!hero.villains) {
+            hero.villains = [];
+        }
+
         hero.villains.push(newVillain);
+
         writeDB(db);
+
         return res.status(200).json(hero);
     } catch (err) {
         return res.status(500).json({ error: err.message });
